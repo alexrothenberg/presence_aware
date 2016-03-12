@@ -2,6 +2,8 @@ defmodule ChirpAwareness.FacesheetChannel do
   use ChirpAwareness.Web, :channel
 
   def join("facesheet:" <> patient_id, %{"user_id" => user_id}, socket) do
+    IO.puts "JOIN: #{user_id} is on #{patient_id} facesheet"
+    #  need to tell user_id everyone else who is here too
     send(self, {:after_join})
     socket_with_assigns = socket
       |> assign(:user_id, user_id)
@@ -10,7 +12,8 @@ defmodule ChirpAwareness.FacesheetChannel do
   end
 
   def terminate(msg, socket) do
-    broadcast! socket, "user:left", %{body: socket.assigns[:user_id]}
+    IO.puts "BYE:  #{socket.assigns[:user_id]} left #{socket.assigns[:patient_id]} facesheet"
+    broadcast! socket, "user:left", %{user_id: socket.assigns[:user_id]}
     {:ok, socket}
   end
 
@@ -20,10 +23,10 @@ defmodule ChirpAwareness.FacesheetChannel do
     {:noreply, socket}
   end
 
-  def handle_in("new_msg", %{:body => body, :user => user_id}, socket) do
-    broadcast! socket, "new_msg", %{body: body, user_id: user_id}
-    {:noreply, socket}
-  end
+  # def handle_in("new_msg", %{:body => body, :user => user_id}, socket) do
+  #   broadcast! socket, "new_msg", %{body: body, user_id: user_id}
+  #   {:noreply, socket}
+  # end
 
   # This is invoked every time a notification is being broadcast
   # to the client. The default implementation is just to push it
