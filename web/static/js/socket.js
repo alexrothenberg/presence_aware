@@ -78,6 +78,13 @@ channel.on("new_msg", payload => {
 channel.on("user:entered", payload => {
   console.log(payload)
   messagesContainer.append(`<br/>[${Date()}] Joined: ${payload.user_id}`)
+  if (payload.user_id !== currentUserId) {
+    channel.push("user:presence_reminder", {user_id: currentUserId})
+  }
+})
+
+channel.on("user:presence_reminder", payload => {
+  messagesContainer.append(`<br/>[${Date()}] Presence Reimdinder: ${payload.user_id}`)
 })
 
 channel.on("user:left", payload => {
