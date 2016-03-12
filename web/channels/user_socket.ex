@@ -2,7 +2,7 @@ defmodule ChirpAwareness.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  channel "facesheet:lobby", ChirpAwareness.FacesheetChannel
+  channel "facesheet:*", ChirpAwareness.FacesheetChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

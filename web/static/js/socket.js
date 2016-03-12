@@ -57,7 +57,7 @@ socket.connect()
 let chatInput         = $("#chat-input")
 let chatUserId        = $("#chat-user-id")
 chatUserId.text("abc-" + Math.floor(Math.random() * 1000))
-let channel = socket.channel("facesheet:lobby", {user_id: chatUserId.text()})
+let channel = socket.channel("facesheet:" + "pat123", {user_id: chatUserId.text()})
 let messagesContainer = $("#messages")
 
 
