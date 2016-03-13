@@ -20,15 +20,29 @@ defmodule ChirpAwareness.FacesheetChannel do
     {:noreply, socket}
   end
 
-  def handle_in("user:presence_reminder", %{"user_id" => user_id}, socket) do
-    IO.puts "PRESENCE REMINDER for #{user_id}"
-    broadcast! socket, "user:presence_reminder", %{user_id: user_id}
+  def handle_in("user:presence_reminder", %{"user_id" => user_id, "send_to" => send_to}, socket) do
+    broadcast! socket, "user:presence_reminder", %{user_id: user_id, send_to: send_to}
     {:noreply, socket}
   end
 
-  # This is invoked every time a notification is being broadcast
-  # to the client. The default implementation is just to push it
-  # downstream but one could filter or change the event.
+  intercept ["user:entered", "user:presence_reminder"]
+
+  # Do not notify ourselves of our own presence
+  def handle_out("user:entered", payload, socket) do
+    if payload.user_id != socket.assigns[:user_id] do
+      push socket, "user:entered", payload
+    end
+    {:noreply, socket}
+  end
+
+  # Only remind the "send_to" user of our presence
+  def handle_out("user:presence_reminder", payload, socket) do
+    if payload.send_to == socket.assigns[:user_id] do
+      push socket, "user:presence_reminder", %{user_id: payload.user_id}
+    end
+    {:noreply, socket}
+  end
+
   def handle_out(event, payload, socket) do
     push socket, event, payload
     {:noreply, socket}
