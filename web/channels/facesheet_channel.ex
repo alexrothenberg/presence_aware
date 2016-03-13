@@ -1,11 +1,11 @@
 defmodule ChirpAwareness.FacesheetChannel do
   use ChirpAwareness.Web, :channel
 
-  def join("facesheet:" <> patient_id, %{"user_id" => user_id}, socket) do
+  def join("notes:" <> note_id, %{"user_id" => user_id}, socket) do
     send(self, {:after_join})
     socket_with_assigns = socket
       |> assign(:user_id, user_id)
-      |> assign(:patient_id, patient_id)
+      |> assign(:note_id, note_id)
     {:ok, socket_with_assigns}
   end
 
