@@ -14,6 +14,7 @@ use Mix.Config
 config :chirp_awareness, ChirpAwareness.Endpoint,
   http: [port: {:system, "PORT"}],
   url: [host: "104.236.250.122", port: 3001],
+  check_origin: ["//icisstaff.dev"],
   cache_static_manifest: "priv/static/manifest.json"
 
 # Do not print debug messages in production
