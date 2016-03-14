@@ -1,0 +1,4 @@
+---
+app_name: chirp_awareness
+repo_url: "https://github.com/alexrothenberg/presence_aware.git"
+app_port: 3001
